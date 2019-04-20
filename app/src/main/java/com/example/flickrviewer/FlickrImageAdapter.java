@@ -2,6 +2,7 @@ package com.example.flickrviewer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +12,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 class FlickrImageAdapter extends BaseAdapter {
     private final Context mContext;
-    private final ArrayList<Bitmap> mImages;
-    private final ArrayList<String> mTitles;
+    private final ArrayList<Photo> mPhotos;
 
-    public FlickrImageAdapter(final Context context, final ArrayList<Bitmap> images, final ArrayList<String> titles) {
+    public FlickrImageAdapter(final Context context, ArrayList<Photo> photos) {
         mContext = context;
-        mImages = images;
-        mTitles = titles;
+        mPhotos = photos;
     }
 
     @Override
     public int getCount() {
-        return mImages.size();
+        return mPhotos.size();
     }
 
     @Override
@@ -41,13 +41,17 @@ class FlickrImageAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View layout = (View) inflater.inflate(R.layout.image_item, null);
+        View layout = inflater.inflate(R.layout.image_item, null);
 
-        ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
-        imageView.setImageBitmap(mImages.get(i));
+        Photo photo;
 
-        TextView textView = (TextView) layout.findViewById(R.id.textView);
-        textView.setText(mTitles.get(i));
+        photo = mPhotos.get(i);
+
+        ImageView imageView = layout.findViewById(R.id.imageView);
+        imageView.setImageBitmap(photo.getImage());
+
+        TextView textView = layout.findViewById(R.id.textView);
+        textView.setText(photo.getTitle());
 
         int width = ((GridView) viewGroup).getColumnWidth();
         layout.setLayoutParams(new GridView.LayoutParams(width, width));
